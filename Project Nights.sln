@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Nights.Plugins", "Project Nights.Plugins.csproj", "{A3FABCE1-FAC9-EB98-DB34-8BE00AC7069C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Nights", "Project Nights.csproj", "{0BC671B3-CB5E-D15A-73DE-6DF2845A72B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project Nights.Editor.Plugins", "Project Nights.Editor.Plugins.csproj", "{D8EB5676-256A-A014-096E-51D9F7CA6E9B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3FABCE1-FAC9-EB98-DB34-8BE00AC7069C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3FABCE1-FAC9-EB98-DB34-8BE00AC7069C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3FABCE1-FAC9-EB98-DB34-8BE00AC7069C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3FABCE1-FAC9-EB98-DB34-8BE00AC7069C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BC671B3-CB5E-D15A-73DE-6DF2845A72B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BC671B3-CB5E-D15A-73DE-6DF2845A72B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BC671B3-CB5E-D15A-73DE-6DF2845A72B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BC671B3-CB5E-D15A-73DE-6DF2845A72B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8EB5676-256A-A014-096E-51D9F7CA6E9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8EB5676-256A-A014-096E-51D9F7CA6E9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8EB5676-256A-A014-096E-51D9F7CA6E9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8EB5676-256A-A014-096E-51D9F7CA6E9B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
