@@ -1,61 +1,80 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.AI;
 
+[RequireComponent(typeof (NavMeshAgent))]
+[RequireComponent(typeof(AICharacterControl))]
 [RequireComponent(typeof (ThirdPersonCharacter))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField]
-    float walkMoveStopRadius = 0.2f;
 
-    ThirdPersonCharacter m_Character;   // A reference to the ThirdPersonCharacter on the object
-    CameraRaycaster cameraRaycaster;
-    Vector3 currentClickTarget;
-        
+    ThirdPersonCharacter thirdPersonCharacter = null;   // A reference to the ThirdPersonCharacter on the object
+    CameraRaycaster cameraRaycaster = null;
+    Vector3 currentDestination, clickPoint;
+    bool isInDirectMode = false;
+    AICharacterControl aiCharacterControl = null;
+    GameObject walkTarget = null;
+
+    //TODO solve fight between serialize and const
+    [SerializeField]
+    const int walkableLayerNumber = 8;
+    [SerializeField]
+    const int enemyLayerNumber = 9;
+
     private void Start()
     {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-        m_Character = GetComponent<ThirdPersonCharacter>();
-        currentClickTarget = transform.position;
+        thirdPersonCharacter = GetComponent<ThirdPersonCharacter>();
+        currentDestination = transform.position;
+        aiCharacterControl = GetComponent<AICharacterControl>();
+
+        cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
+        walkTarget = new GameObject("walkTarget");
     }
 
-    // Fixed update is called in sync with physics
-    private void FixedUpdate()
+    void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
     {
-
-        //TODO: FIX ISSUE WITH CLICK TO MOVE AND WASD
-        //TODO: ALSO FIX ISSUE WITH WALKING ANIMATION
-        if (Input.GetMouseButton(0))
+        switch(layerHit)
         {
-            print("Cursor raycast hit layer " + cameraRaycaster.layerHit);
-            switch (cameraRaycaster.layerHit)
-            {
-                case Layer.Walkable:
-                    currentClickTarget = cameraRaycaster.hit.point;                    
-                    break;
-                case Layer.Enemy:
-                    print("Not Moving To Enemy");
-                    break;
-                default:
-                    print("Unexpected layer found");
-                    break;
-            }
-            
+            case enemyLayerNumber:
+                //navigate to the enemy
+                GameObject enemy = raycastHit.collider.gameObject;
+                aiCharacterControl.SetTarget(enemy.transform);
+                break;
+            case walkableLayerNumber:
+                //navigate to point on the ground
+                //TODO consider whether we really want to do this for player movement
+                walkTarget.transform.position = raycastHit.point;
+                aiCharacterControl.SetTarget(walkTarget.transform);
+                break;
+            default:
+                Debug.LogWarning("Don't know how to handle mouse click for player movement");
+                return;
         }
+    }
 
-        //stop spinning in circles due to overshooting!
-        var playerToClickPoint = currentClickTarget - transform.position;
-        if (playerToClickPoint.magnitude >= walkMoveStopRadius)
-        {
-            m_Character.Move(playerToClickPoint, false, false);
-        }
-        else
-        {
-            m_Character.Move(Vector3.zero, false, false);
-        }
+    //TODO make this get called again
+    private void ProcessDirectMovement()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-        
+         
+
+        Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 movement = v * cameraForward + h * Camera.main.transform.transform.right;
+
+        thirdPersonCharacter.Move(movement, false, false);
 
     }
+
+    Vector3 ShortDestination(Vector3 destination, float shortening)
+    {
+        Vector3 reductionVector = (destination - transform.position).normalized * shortening;
+        return destination - reductionVector;
+    }
+
+
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(CameraRaycaster))]
 public class CursorAffordance: MonoBehaviour {
 
     [SerializeField]
@@ -11,7 +12,13 @@ public class CursorAffordance: MonoBehaviour {
     [SerializeField]
     Texture2D otherCursor = null;
     [SerializeField]
-    Vector2 cursorHotspot = new Vector2(96, 96);
+    Vector2 cursorHotspot = new Vector2(0, 0);
+
+    //TODO solve fight between serialize and const
+    [SerializeField]
+    const int walkableLayerNumber = 8;
+    [SerializeField]
+    const int enemyLayerNumber = 9;
 
     CameraRaycaster cameraRaycaster;
 
@@ -19,23 +26,25 @@ public class CursorAffordance: MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         cameraRaycaster = GetComponent<CameraRaycaster>();
+        cameraRaycaster.notifyLayerChangeObservers += OnLayerChange; //registering as an observer
 	}
 	
-	// Update is called once per frame
-	void Update () {
 
-        switch (cameraRaycaster.layerHit)
+	void OnLayerChange (int newLayer) {
+                
+        switch (newLayer)
         {
-            case Layer.Walkable:
+            case walkableLayerNumber:
                 Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto);
                 break;
-            case Layer.Enemy:
+            case enemyLayerNumber:
                 Cursor.SetCursor(enemyCursor, cursorHotspot, CursorMode.Auto);
                 break;
             default:
                 Cursor.SetCursor(otherCursor, cursorHotspot, CursorMode.Auto);
-                break;
+                return;
         }
 
     }
+    //TODO consider de-registering OnLayerChanged on leaving all game scenes
 }
